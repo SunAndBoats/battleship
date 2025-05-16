@@ -1,4 +1,4 @@
-import Player from './modules/player';
+import Player from './modules/player/index.js';
 
 const player = Player();
 const enemy = Player();

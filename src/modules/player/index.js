@@ -1,4 +1,4 @@
-import Gameboard from '../gameboard';
+import Gameboard from '../gameboard/index.js';
 
 function Player() {
   const board = Gameboard();
