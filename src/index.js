@@ -1,5 +1,10 @@
-const saludo = () => {
-  console.log('Hola desde Babel y Webpack!');
-};
+import Player from './modules/player';
 
-saludo();
+const player = Player();
+const enemy = Player();
+
+enemy.board.placeShip(
+  { hit: () => {}, length: 1, isSunk: () => false },
+  [0, 0]
+);
+console.log(player.attack(enemy, [0, 0])); // 'hit'

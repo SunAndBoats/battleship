@@ -1,10 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1747377869144" clover="3.2.0">
-  <project timestamp="1747377869145" name="All files">
-    <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1" elements="2" coveredelements="2" complexity="0" loc="1" ncloc="1" packages="1" files="1" classes="1"/>
-    <file name="add.js" path="/home/vboxuser/repos/template/src/modules/example/add.js">
-      <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-      <line num="2" count="1" type="stmt"/>
-    </file>
+<coverage generated="1747384810488" clover="3.2.0">
+  <project timestamp="1747384810489" name="All files">
+    <metrics statements="23" coveredstatements="23" conditionals="5" coveredconditionals="4" methods="10" coveredmethods="10" elements="38" coveredelements="37" complexity="0" loc="23" ncloc="23" packages="3" files="3" classes="3"/>
+    <package name="gameboard">
+      <metrics statements="16" coveredstatements="16" conditionals="5" coveredconditionals="4" methods="5" coveredmethods="5"/>
+      <file name="index.js" path="/home/vboxuser/repos/battleship/src/modules/gameboard/index.js">
+        <metrics statements="16" coveredstatements="16" conditionals="5" coveredconditionals="4" methods="5" coveredmethods="5"/>
+        <line num="2" count="4" type="stmt"/>
+        <line num="3" count="4" type="stmt"/>
+        <line num="4" count="4" type="stmt"/>
+        <line num="7" count="3" type="stmt"/>
+        <line num="8" count="3" type="stmt"/>
+        <line num="9" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="10" count="4" type="stmt"/>
+        <line num="15" count="5" type="stmt"/>
+        <line num="16" count="5" type="stmt"/>
+        <line num="17" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="18" count="4" type="stmt"/>
+        <line num="19" count="4" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="30" count="4" type="stmt"/>
+      </file>
+    </package>
+    <package name="player">
+      <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+      <file name="index.js" path="/home/vboxuser/repos/battleship/src/modules/player/index.js">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="ship">
+      <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+      <file name="index.js" path="/home/vboxuser/repos/battleship/src/modules/ship/index.js">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+        <line num="2" count="3" type="stmt"/>
+        <line num="5" count="6" type="stmt"/>
+        <line num="9" count="4" type="stmt"/>
+        <line num="12" count="3" type="stmt"/>
+      </file>
+    </package>
   </project>
 </coverage>
