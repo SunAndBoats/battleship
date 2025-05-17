@@ -1,7 +1,11 @@
 // src/modules/ui/index.js
 
-export function renderBoard(container, board, isPlayer = false) {
+export function renderBoard(container, board, revealShips = false) {
   container.innerHTML = '';
+  const grid = document.createElement('div');
+  grid.classList.add('board');
+  container.appendChild(grid);
+
   for (let y = 0; y < 10; y++) {
     for (let x = 0; x < 10; x++) {
       const cell = document.createElement('div');
@@ -10,47 +14,84 @@ export function renderBoard(container, board, isPlayer = false) {
       cell.dataset.y = y;
 
       const key = `${x},${y}`;
-
       if (board.hits.has(key)) {
         cell.classList.add('hit');
       } else if (board.missedShots.has(key)) {
         cell.classList.add('miss');
-      } else if (isPlayer && board.occupied.has(key)) {
+      } else if (revealShips && board.shipPositions.has(key)) {
         cell.classList.add('ship');
       }
 
-      container.appendChild(cell);
+      grid.appendChild(cell);
     }
   }
 }
 
-export function bindAttackBoard(container, callback) {
-  container.addEventListener('click', (e) => {
-    if (!e.target.classList.contains('cell')) return;
-    const x = parseInt(e.target.dataset.x, 10);
-    const y = parseInt(e.target.dataset.y, 10);
-    callback([x, y]);
+export function bindAttackBoard(container, onAttack) {
+  container.querySelector('.board').addEventListener('click', (e) => {
+    const cell = e.target;
+    if (!cell.classList.contains('cell')) return;
+    if (cell.classList.contains('hit') || cell.classList.contains('miss'))
+      return;
+    const x = Number(cell.dataset.x);
+    const y = Number(cell.dataset.y);
+    onAttack([x, y]);
   });
 }
 
-export function setStatus(message) {
+export function setStatus(text) {
   const statusDiv = document.getElementById('status');
-  if (statusDiv) statusDiv.textContent = message;
+  if (statusDiv) statusDiv.textContent = text;
 }
 
-export function startGame() {
-  const playerBoard = document.createElement('div');
-  const computerBoard = document.createElement('div');
-  const status = document.createElement('div');
+export function startGame(player, enemy) {
+  const playerContainer = document.getElementById('player-board');
+  const computerContainer = document.getElementById('computer-board');
 
-  playerBoard.id = 'player-board';
-  computerBoard.id = 'computer-board';
-  status.id = 'status';
+  // Initial render
+  renderBoard(playerContainer, player.board, true);
+  renderBoard(computerContainer, enemy.board, false);
+  setStatus('Your turn: click on the enemy board to attack.');
 
-  playerBoard.classList.add('board');
-  computerBoard.classList.add('board');
+  // Bind clicks
+  bindAttackBoard(computerContainer, (coords) => {
+    const result = player.attack(enemy, coords);
+    setStatus(`You ${result} at (${coords.join(',')})`);
+    renderBoard(computerContainer, enemy.board, false);
 
-  document.body.appendChild(status);
-  document.body.appendChild(playerBoard);
-  document.body.appendChild(computerBoard);
+    if (enemy.board.allSunk()) {
+      setStatus('You win! 🎉');
+      disableBoard(computerContainer);
+      return;
+    }
+
+    // Computer's turn
+    const playerContainerUI = playerContainer;
+    setTimeout(() => {
+      let compCoords;
+      do {
+        compCoords = [
+          Math.floor(Math.random() * 10),
+          Math.floor(Math.random() * 10),
+        ];
+      } while (
+        player.board.hits.has(compCoords.join(',')) ||
+        player.board.missedShots.has(compCoords.join(','))
+      );
+      const compResult = enemy.attack(player, compCoords);
+      setStatus(`Computer ${compResult} at (${compCoords.join(',')})`);
+      renderBoard(playerContainerUI, player.board, true);
+
+      if (player.board.allSunk()) {
+        setStatus('Computer wins! 💥');
+        disableBoard(computerContainer);
+      }
+    }, 500);
+  });
+}
+
+function disableBoard(container) {
+  container
+    .querySelectorAll('.cell')
+    .forEach((c) => c.classList.add('disabled'));
 }
