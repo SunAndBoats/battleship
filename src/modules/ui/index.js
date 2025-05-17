@@ -26,13 +26,29 @@ export function renderBoard(container, board, revealShips = false) {
     }
   }
 }
-
+/*
 export function bindAttackBoard(container, onAttack) {
   container.querySelector('.board').addEventListener('click', (e) => {
     const cell = e.target;
     if (!cell.classList.contains('cell')) return;
     if (cell.classList.contains('hit') || cell.classList.contains('miss'))
       return;
+    const x = Number(cell.dataset.x);
+    const y = Number(cell.dataset.y);
+    onAttack([x, y]);
+  });
+}
+*/
+export function bindAttackBoard(container, onAttack) {
+  // Listener en el container: sobrevive a los rerenders de los hijos
+  container.addEventListener('click', (e) => {
+    const cell = e.target.closest('.cell');
+    if (!cell || !container.contains(cell)) return;
+
+    // Evita re-atacar celdas ya marcadas
+    if (cell.classList.contains('hit') || cell.classList.contains('miss'))
+      return;
+
     const x = Number(cell.dataset.x);
     const y = Number(cell.dataset.y);
     onAttack([x, y]);
