@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>18/18</span>
+                <span class='fraction'>23/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">85.71% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/5</span>
+                <span class='fraction'>6/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>16/16</span>
+                <span class='fraction'>20/20</span>
             </div>
         
             
@@ -96,7 +96,17 @@
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
@@ -106,22 +116,25 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -129,39 +142,53 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">function Gameboard() {
-  const board = {};
-  const missed = [];
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">export default function Gameboard() {
+  const missedShots = new Set();
+  const hits = new Set();
+  const shipPositions = new Set();
   const ships = [];
 &nbsp;
-  function placeShip(ship, [x, y], dir = 'horizontal') {
-    ships.push(ship);
+  function placeShip(ship, [x, y], direction = 'horizontal') {
+    const positions = [];
     for (let i = 0; i &lt; ship.length; i++) {
-      const pos = dir === 'horizontal' ? [x + i, y] : <span class="branch-1 cbranch-no" title="branch not covered" >[x, y + i];</span>
-      board[pos.toString()] = ship;
+      const pos = direction === 'horizontal' ? [x + i, y] : <span class="branch-1 cbranch-no" title="branch not covered" >[x, y + i];</span>
+      positions.push(pos);
+      shipPositions.add(`${pos[0]},${pos[1]}`);
     }
+    ships.push({ ship, positions });
   }
 &nbsp;
   function receiveAttack([x, y]) {
-    const key = [x, y].toString();
-    const target = board[key];
-    if (target) {
-      target.hit();
-      return 'hit';
-    } else {
-      missed.push(key);
-      return 'miss';
+    const key = `${x},${y}`;
+    for (const { ship, positions } of ships) {
+      if (positions.some(([px, py]) =&gt; px === x &amp;&amp; py === y)) {
+        ship.hit();
+        hits.add(key);
+        return 'hit';
+      }
     }
+    missedShots.add(key);
+    return 'miss';
   }
 &nbsp;
   function allSunk() {
-    return ships.every((s) =&gt; s.isSunk());
+    return ships.every(({ ship }) =&gt; ship.isSunk());
   }
 &nbsp;
-  return { placeShip, receiveAttack, allSunk, missed };
+  return {
+    placeShip,
+    receiveAttack,
+    allSunk,
+    missedShots,
+    hits,
+    shipPositions,
+  };
 }
-&nbsp;
-export default Gameboard;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -169,7 +196,7 @@ export default Gameboard;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-16T08:40:10.475Z
+                at 2025-05-17T05:40:24.012Z
             </div>
         <script src="../prettify.js"></script>
         <script>

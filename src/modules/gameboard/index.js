@@ -1,33 +1,42 @@
-function Gameboard() {
-  const board = {};
-  const missed = [];
+export default function Gameboard() {
+  const missedShots = new Set();
+  const hits = new Set();
+  const shipPositions = new Set();
   const ships = [];
 
-  function placeShip(ship, [x, y], dir = 'horizontal') {
-    ships.push(ship);
+  function placeShip(ship, [x, y], direction = 'horizontal') {
+    const positions = [];
     for (let i = 0; i < ship.length; i++) {
-      const pos = dir === 'horizontal' ? [x + i, y] : [x, y + i];
-      board[pos.toString()] = ship;
+      const pos = direction === 'horizontal' ? [x + i, y] : [x, y + i];
+      positions.push(pos);
+      shipPositions.add(`${pos[0]},${pos[1]}`);
     }
+    ships.push({ ship, positions });
   }
 
   function receiveAttack([x, y]) {
-    const key = [x, y].toString();
-    const target = board[key];
-    if (target) {
-      target.hit();
-      return 'hit';
-    } else {
-      missed.push(key);
-      return 'miss';
+    const key = `${x},${y}`;
+    for (const { ship, positions } of ships) {
+      if (positions.some(([px, py]) => px === x && py === y)) {
+        ship.hit();
+        hits.add(key);
+        return 'hit';
+      }
     }
+    missedShots.add(key);
+    return 'miss';
   }
 
   function allSunk() {
-    return ships.every((s) => s.isSunk());
+    return ships.every(({ ship }) => ship.isSunk());
   }
 
-  return { placeShip, receiveAttack, allSunk, missed };
+  return {
+    placeShip,
+    receiveAttack,
+    allSunk,
+    missedShots,
+    hits,
+    shipPositions,
+  };
 }
-
-export default Gameboard;
